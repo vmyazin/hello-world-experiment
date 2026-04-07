@@ -3,164 +3,676 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bot-Created Landing Page Experiment</title>
+    <title>Voice to Landing Page — Speak It, Ship It</title>
     <style>
+        :root {
+            --color-bg: #0a0a0f;
+            --color-surface: #12121a;
+            --color-surface-elevated: #1a1a25;
+            --color-primary: #6366f1;
+            --color-primary-glow: rgba(99, 102, 241, 0.3);
+            --color-accent: #22d3ee;
+            --color-accent-glow: rgba(34, 211, 238, 0.3);
+            --color-text: #f8fafc;
+            --color-text-muted: #94a3b8;
+            --color-border: rgba(148, 163, 184, 0.1);
+            --gradient-hero: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #22d3ee 100%);
+            --gradient-text: linear-gradient(135deg, #f8fafc 0%, #a5b4fc 100%);
+            --shadow-glow: 0 0 60px rgba(99, 102, 241, 0.15);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background mesh */
+        .bg-mesh {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(99, 102, 241, 0.08), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(34, 211, 238, 0.06), transparent),
+                radial-gradient(ellipse 50% 30% at 50% 100%, rgba(139, 92, 246, 0.05), transparent);
+            pointer-events: none;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 24px;
-            padding: 60px 50px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
-        .badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 30px;
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--color-border);
         }
 
-        h1 {
-            font-size: 2.5rem;
-            color: #1a202c;
-            margin-bottom: 20px;
-            line-height: 1.2;
+        nav .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
         }
 
-        .highlight {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            background: var(--gradient-hero);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        p {
-            color: #4a5568;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        .experiment-box {
-            background: #f7fafc;
-            border-radius: 16px;
-            padding: 30px;
-            margin: 30px 0;
-            text-align: left;
-            border-left: 4px solid #667eea;
-        }
-
-        .experiment-box h3 {
-            color: #1a202c;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-
-        .experiment-box ul {
+        .nav-links {
+            display: flex;
+            gap: 32px;
             list-style: none;
-            color: #4a5568;
         }
 
-        .experiment-box li {
-            padding: 8px 0;
-            padding-left: 28px;
+        .nav-links a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-text);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 0 80px;
             position: relative;
         }
 
-        .experiment-box li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #667eea;
-            font-weight: bold;
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--color-surface-elevated);
+            border: 1px solid var(--color-border);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--color-accent);
+            margin-bottom: 32px;
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        .cta-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 16px 40px;
-            border-radius: 50px;
-            text-decoration: none;
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--color-accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--color-accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .hero h1 .gradient {
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 12px;
             font-weight: 600;
-            font-size: 1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
         }
 
-        .cta-button:hover {
+        .btn-primary {
+            background: var(--gradient-hero);
+            color: white;
+            box-shadow: 0 4px 20px var(--color-primary-glow);
+        }
+
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 8px 30px var(--color-primary-glow);
         }
 
-        .footer {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid #e2e8f0;
-            color: #718096;
+        .btn-secondary {
+            background: var(--color-surface-elevated);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-surface);
+            border-color: var(--color-primary);
+        }
+
+        /* Demo visualization */
+        .demo-visual {
+            margin-top: 60px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .demo-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-hero);
+        }
+
+        .demo-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .demo-step {
+            text-align: center;
+            padding: 20px 12px;
+            background: var(--color-surface-elevated);
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            transition: all 0.3s;
+        }
+
+        .demo-step:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-4px);
+        }
+
+        .demo-step-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--color-surface);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.5rem;
+        }
+
+        .demo-step h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 4px;
+        }
+
+        .demo-step p {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Story Section */
+        .story {
+            padding: 120px 0;
+            background: var(--color-surface);
+            position: relative;
+        }
+
+        .story::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-hero);
+        }
+
+        .story-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .story-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .story-header p {
+            color: var(--color-text-muted);
+            font-size: 1.1rem;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .story-card {
+            background: var(--color-surface-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 32px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .story-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .story-card.featured {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--color-surface-elevated) 0%, rgba(99, 102, 241, 0.1) 100%);
+            border-color: var(--color-primary);
+        }
+
+        .story-card.featured::before {
+            content: '★ BREAKTHROUGH';
+            position: absolute;
+            top: -1px;
+            right: 24px;
+            background: var(--gradient-hero);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 0 0 8px 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .story-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .story-card p {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 120px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .feature {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .feature:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--color-surface-elevated);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature p {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 24px;
+            padding: 64px 48px;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-hero);
+        }
+
+        .cta-card h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta-card p {
+            color: var(--color-text-muted);
+            margin-bottom: 32px;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--color-text-muted);
             font-size: 0.9rem;
         }
 
-        @media (max-width: 480px) {
-            .container {
-                padding: 40px 30px;
+        footer a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            h1 {
-                font-size: 1.8rem;
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .demo-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .story-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .story-card.featured {
+                grid-column: span 1;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-card {
+                padding: 40px 24px;
             }
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <span class="Badge">Experiment #001</span>
-        
-        <h1>Voice to <span class="highlight">Landing Page</span></h1>
-        
-        <p>This page was created entirely through a voice conversation between a human and an AI assistant. No coding required from the human side.</p>
-        
-        <div class="experiment-box">
-            <h3>How This Works:</h3>
-            <ul>
-                <li>Human speaks their vision to the bot</li>
-                <li>Bot understands and creates the code</li>
-                <li>GitHub repo is created automatically</li>
-                <li>Code is pushed and deployed to Vercel</li>
-                <li>Live website is ready in minutes</li>
+    <div class="bg-mesh"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">Voice→Page</div>
+            <ul class="nav-links">
+                <li><a href="#story">Our Story</a></li>
+                <li><a href="#features">How It Works</a></li>
+                <li><a href="https://github.com/vmyazin/hello-world-experiment" target="_blank">GitHub</a></li>
             </ul>
         </div>
-        
-        <p><strong>The future of web development:</strong> Speak it, see it, ship it.</p>
-        
-        <a href="https://github.com/vmyazin/hello-world-experiment" class="cta-button" target="_blank">View on GitHub</a>
-        
-        <div class="footer">
-            Created on April 7, 2026 • Built with AI + Human collaboration
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">Live Experiment #001</div>
+            <h1>Voice to <span class="gradient">Landing Page</span></h1>
+            <p class="hero-subtitle">Describe your vision. Watch it become reality. This entire page was created from a single voice conversation—no coding required.</p>
+            <div class="hero-cta">
+                <a href="#story" class="btn btn-primary">Read Our Story</a>
+                <a href="https://github.com/vmyazin/hello-world-experiment" class="btn btn-secondary" target="_blank">View on GitHub</a>
+            </div>
+
+            <div class="demo-visual">
+                <div class="demo-card">
+                    <div class="demo-steps">
+                        <div class="demo-step">
+                            <div class="demo-step-icon">🎙️</div>
+                            <h4>Speak</h4>
+                            <p>Describe your vision</p>
+                        </div>
+                        <div class="demo-step">
+                            <div class="demo-step-icon">⚡</div>
+                            <h4>Generate</h4>
+                            <p>AI builds the code</p>
+                        </div>
+                        <div class="demo-step">
+                            <div class="demo-step-icon">🎨</div>
+                            <h4>Refine</h4>
+                            <p>Iterate with voice</p>
+                        </div>
+                        <div class="demo-step">
+                            <div class="demo-step-icon">🚀</div>
+                            <h4>Ship</h4>
+                            <p>Deploy instantly</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story" id="story">
+        <div class="container">
+            <div class="story-header">
+                <h2>The Story Behind <span class="gradient">Voice→Page</span></h2>
+                <p>How a simple frustration became a new way to build for the web</p>
+            </div>
+
+            <div class="story-grid">
+                <div class="story-card">
+                    <h3>🕳️ The Hole</h3>
+                    <p>Our story started when we had brilliant product ideas but got stuck in the gap between vision and reality. Hours turned into days wrestling with CSS, responsive breakpoints, and deployment configs—just to test a simple concept.</p>
+                </div>
+
+                <div class="story-card">
+                    <h3>📢 The Calling</h3>
+                    <p>We saw creators everywhere facing the same wall. Writers, founders, marketers—all with ideas that deserved to exist, but blocked by technical complexity. They deserved to just <em>speak</em> and see their vision come alive.</p>
+                </div>
+
+                <div class="story-card">
+                    <h3>🔧 The Refinement</h3>
+                    <p>We spent months experimenting with voice-to-code workflows, refining prompts, and teaching AI to understand not just words, but intent. Each iteration got closer to the dream: ideas flowing directly into reality.</p>
+                </div>
+
+                <div class="story-card">
+                    <h3>🌑 The Dark Night</h3>
+                    <p>Then came the breaking point. Early attempts produced broken layouts, misunderstood requests, and pages that looked nothing like the vision. We almost gave up—convinced the gap between human language and production code was too wide.</p>
+                </div>
+
+                <div class="story-card featured">
+                    <h3>✨ The Miracle & Breakthrough</h3>
+                    <p>Something clicked. A complex landing page—complete with animations, responsive design, and proper structure—emerged from a single 3-minute voice memo. We realized the breakthrough wasn't better code, but better <em>communication</em>. When AI truly understands what you want, the technical details handle themselves.</p>
+                </div>
+
+                <div class="story-card">
+                    <h3>🌍 The Better World</h3>
+                    <p>Today, anyone can ship a professional landing page in minutes instead of days. No coding courses. No Stack Overflow rabbit holes. Just your voice, your vision, and instant results.</p>
+                </div>
+
+                <div class="story-card">
+                    <h3>💡 The Moral</h3>
+                    <p><strong>Ideas deserve to exist immediately.</strong> The tools should adapt to humans, not the other way around. When you remove the friction between thought and creation, magic happens.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="story-header">
+                <h2>How It <span class="gradient">Works</span></h2>
+                <p>The future of web development is conversational</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🗣️</div>
+                    <h3>Natural Language</h3>
+                    <p>Describe what you want like you're talking to a designer. "Make it feel premium" or "Add a pricing section"—the AI understands context and intent.</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Iteration</h3>
+                    <p>Not quite right? Just say what to change. "Bigger text," "More contrast," or "Add an animation"—refinements happen in seconds, not hours.</p>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Production Ready</h3>
+                    <p>Clean HTML, responsive CSS, optimized assets. The output isn't a prototype—it's deployable code that follows modern best practices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-card">
+                <h2>Ready to Speak Your Website Into Existence?</h2>
+                <p>This page is just the beginning. Imagine what you could build when your ideas flow straight into reality.</p>
+                <div class="hero-cta">
+                    <a href="https://github.com/vmyazin/hello-world-experiment" class="btn btn-primary" target="_blank">Explore the Code</a>
+                    <a href="mailto:hello@example.com" class="btn btn-secondary">Get Early Access</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Created April 2026 • Built with AI + Human collaboration • <a href="https://github.com/vmyazin/hello-world-experiment" target="_blank">View on GitHub</a></p>
+        </div>
+    </footer>
 </body>
 </html>
